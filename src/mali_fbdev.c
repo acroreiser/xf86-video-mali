@@ -594,7 +594,11 @@ Bool MaliHWSaveScreen(ScreenPtr pScreen, int mode)
 	return TRUE;
 }
 
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+ModeStatus MaliHWValidMode(ScreenPtr pScreen, DisplayModePtr mode, Bool verbose, int flags)
+#else
 ModeStatus MaliHWValidMode(int scrnIndex, DisplayModePtr mode, Bool verbose, int flags)
+#endif
 {
 #if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -612,7 +616,11 @@ ModeStatus MaliHWValidMode(int scrnIndex, DisplayModePtr mode, Bool verbose, int
 	return MODE_OK;
 }
 
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+Bool MaliHWSwitchMode(ScreenPtr pScreen, DisplayModePtr mode, int flags)
+#else
 Bool MaliHWSwitchMode(int scrnIndex, DisplayModePtr mode, int flags)
+#endif
 {
 #if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -628,7 +636,11 @@ Bool MaliHWSwitchMode(int scrnIndex, DisplayModePtr mode, int flags)
 	return TRUE;
 }
 
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+void MaliHWAdjustFrame(ScreenPtr pScreen, int x, int y, int flags)
+#else
 void MaliHWAdjustFrame(int scrnIndex, int x, int y, int flags)
+#endif
 {
 #if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -647,11 +659,19 @@ void MaliHWAdjustFrame(int scrnIndex, int x, int y, int flags)
 	fPtr->var.yoffset = y;
 	if ( -1 == ioctl( fPtr->fd, FBIOPAN_DISPLAY, (void*)&fPtr->var) )
 	{
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+        	xf86DrvMsgVerb(pScrn->scrnIndex, X_WARNING, 5, "FBIOPAN_DISPLAY: %s\n", strerror(errno));
+#else
 		xf86DrvMsgVerb(scrnIndex, X_WARNING, 5, "FBIOPAN_DISPLAY: %s\n", strerror(errno));
+#endif
 	}
 }
 
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+Bool MaliHWEnterVT(ScreenPtr pScreen, int flags)
+#else
 Bool MaliHWEnterVT(int scrnIndex, int flags)
+#endif
 {
 #if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -663,12 +683,16 @@ Bool MaliHWEnterVT(int scrnIndex, int flags)
 	IGNORE(flags);
 
 	if (!MaliHWModeInit(pScrn, pScrn->currentMode)) return FALSE;
-	MaliHWAdjustFrame(scrnIndex, pScrn->frameX0, pScrn->frameY0, 0);
+	MaliHWAdjustFrame(pScrn->scrnIndex, pScrn->frameX0, pScrn->frameY0, 0);
 
 	return TRUE;
 }
 
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+void MaliHWLeaveVT(ScreenPtr pScreen, int flags)
+#else
 void MaliHWLeaveVT(int scrnIndex, int flags)
+#endif
 {
 #if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -1332,7 +1356,12 @@ static Bool MaliScreenInit(int scrnIndex, ScreenPtr pScreen, int argc, char **ar
 	return TRUE;
 }
 
-static Bool MaliCloseScreen(int scrnIndex, ScreenPtr pScreen)
+
+#if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
+static Bool	MaliCloseScreen(ScreenPtr pScreen)
+#else
+static Bool	MaliCloseScreen(int scrnIndex, ScreenPtr pScreen)
+#endif
 {
 #if XORG_VERSION_CURRENT > XORG_VERSION_NUMERIC(1,12,99,901,0)
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
