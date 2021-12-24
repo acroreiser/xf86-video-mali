@@ -922,7 +922,7 @@ static Bool mali_drm_open_master( ScrnInfoPtr pScrn )
 	sv.drm_dd_major = -1;
 	sv.drm_dd_minor = -1;
 
-	err = drmSetInterfaceVersion( fPtr->drm_fd, &sv );
+	err = 0;
 	if ( err != 0 )
 	{
 		xf86DrvMsg( pScrn->scrnIndex, X_ERROR, "%s DRM failed to interface version\n", __func__ );
