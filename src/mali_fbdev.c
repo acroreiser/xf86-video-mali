@@ -59,7 +59,7 @@ static void	MaliIdentify(int flags);
 static Bool	MaliProbe(DriverPtr drv, int flags);
 static Bool	MaliPreInit(ScrnInfoPtr pScrn, int flags);
 static Bool	MaliScreenInit(int Index, ScreenPtr pScreen, int argc, char **argv);
-static Bool	MaliCloseScreen(int scrnIndex, ScreenPtr pScreen);
+static Bool	MaliCloseScreen(ScreenPtr pScreen);
 
 static int pix24bpp = 0;
 static int malihwPrivateIndex = -1;
@@ -1269,9 +1269,9 @@ static Bool MaliScreenInit(int scrnIndex, ScreenPtr pScreen, int argc, char **ar
 	return TRUE;
 }
 
-static Bool MaliCloseScreen(int scrnIndex, ScreenPtr pScreen)
+static Bool MaliCloseScreen(ScreenPtr pScreen)
 {
-	ScrnInfoPtr pScrn = xf86Screens[scrnIndex];
+	ScrnInfoPtr pScrn = xf86Screens[0];
 	MaliPtr fPtr = MALIPTR(pScrn);
 
 	TRACE_ENTER();
@@ -1283,7 +1283,7 @@ static Bool MaliCloseScreen(int scrnIndex, ScreenPtr pScreen)
 	pScreen->CreateScreenResources = fPtr->CreateScreenResources;
 	pScreen->CloseScreen = fPtr->CloseScreen;
 
-	(*pScreen->CloseScreen)(scrnIndex, pScreen);
+	(*pScreen->CloseScreen)(pScreen);
 
 	if ( fPtr->dri_open && fPtr->dri_render == DRI_2 )
 	{
