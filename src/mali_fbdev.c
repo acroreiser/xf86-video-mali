@@ -244,7 +244,7 @@ static Bool fbdev_crtc_config_resize( ScrnInfoPtr pScrn, int width, int height )
 	pScrn->virtualY = height;
 
 	/* update pitch setting in EXA */
-#if 1
+#if 0
 	PixmapPtr frontPixmap = (*pScrn->pScreen->GetScreenPixmap)(pScrn->pScreen);
 	PixmapPtr backPixmap  = ((PrivPixmap *)exaGetPixmapDriverPrivate(frontPixmap))->other_buffer;
 	

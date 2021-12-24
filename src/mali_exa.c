@@ -347,25 +347,20 @@ static Bool maliPrepareAccess(PixmapPtr pPix, int index)
 	}
 
 	mem_info = privPixmap->mem_info;
-	if ( NULL != mem_info ) 
+	if ( NULL == mem_info )
+		mem_info = calloc(1, sizeof(*mem_info));
+
+	if ( privPixmap->refs == 0 ) 
 	{
-		if ( privPixmap->refs == 0 ) 
+		if (privPixmap->isFrameBuffer)
 		{
-			if (privPixmap->isFrameBuffer)
-			{
-				privPixmap->addr = (unsigned long)fPtr->fbmem;
-			}
-			else
-			{
-				privPixmap->addr = (unsigned long)ump_mapped_pointer_get( mem_info->handle );
-			}
-			privPixmap->addr += mem_info->offset;
+			privPixmap->addr = (unsigned long)fPtr->fbmem;
 		}
-	}
-	else
-	{
-		xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "[%s:%d] No mem_info on pixmap\n", __FUNCTION__, __LINE__);
-		return FALSE;
+		else
+		{
+			privPixmap->addr = (unsigned long)ump_mapped_pointer_get( mem_info->handle );
+		}
+		privPixmap->addr += mem_info->offset;
 	}
 
 	pPix->devPrivate.ptr = (void *)(privPixmap->addr);
